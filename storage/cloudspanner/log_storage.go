@@ -526,6 +526,11 @@ func (tx *logTX) StoreSignedLogRoot(ctx context.Context, root *trillian.SignedLo
 	return stx.BufferWrite([]*spanner.Mutation{m})
 }
 
+// TODO: Implement
+func (tx *logTX) LatestStableSignedLogRoot(ctx context.Context) (*trillian.SignedLogRoot, error) {
+	return nil, nil
+}
+
 func readLeaves(ctx context.Context, stx *spanner.ReadOnlyTransaction, logID int64, ids [][]byte, f func(*trillian.LogLeaf)) error {
 	leafTable := leafDataTbl
 	cols := []string{colLeafIdentityHash, colLeafValue, colExtraData, colQueueTimestampNanos}

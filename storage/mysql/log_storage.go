@@ -55,6 +55,12 @@ const (
 			FROM TreeHead WHERE TreeId=?
 			ORDER BY TreeHeadTimestamp DESC LIMIT 1`
 
+	selectLatestStableSignedLogRootSQL = `SELECT TreeHeadTimestamp,TreeSize,RootHash
+			FROM TreeHead
+			WHERE TreeId=?
+			AND TreeHeadTimestamp>?
+			ORDER BY TreeHeadTimestamp ASC LIMIT 1`
+
 	selectLeavesByRangeSQL = `SELECT s.MerkleLeafHash,l.LeafIdentityHash,l.LeafValue,s.SequenceNumber,l.ExtraData,l.QueueTimestampNanos,s.IntegrateTimestampNanos
 			FROM LeafData l,SequencedLeafData s
 			WHERE l.LeafIdentityHash = s.LeafIdentityHash
@@ -699,6 +705,37 @@ func (t *logTreeTX) fetchLatestRoot(ctx context.Context) (*trillian.SignedLogRoo
 	}
 
 	return &trillian.SignedLogRoot{LogRoot: logRoot}, treeRevision, nil
+}
+
+// LatestStableSignedLogRoot reads the latest stable root from the DB.
+func (t *logTreeTX) LatestStableSignedLogRoot(ctx context.Context) (*trillian.SignedLogRoot, error) {
+	t.treeTX.mu.Lock()
+	defer t.treeTX.mu.Unlock()
+
+	// TODO: Remove hardcoded time
+	ts := time.Now().Truncate(5 * time.Minute).UnixNano()
+
+	var timestamp, treeSize int64
+	var rootHash []byte
+	if err := t.tx.QueryRowContext(
+		ctx, selectLatestStableSignedLogRootSQL, t.treeID, ts).Scan(
+		&timestamp, &treeSize, &rootHash,
+	); err == sql.ErrNoRows {
+		// It's possible there are no roots for this tree yet
+		return nil, storage.ErrTreeNeedsInit
+	}
+
+	// Put logRoot back together. Fortunately LogRoot has a deterministic serialization.
+	logRoot, err := (&types.LogRootV1{
+		RootHash:       rootHash,
+		TimestampNanos: uint64(timestamp),
+		TreeSize:       uint64(treeSize),
+	}).MarshalBinary()
+	if err != nil {
+		return nil, err
+	}
+
+	return &trillian.SignedLogRoot{LogRoot: logRoot}, nil
 }
 
 func (t *logTreeTX) StoreSignedLogRoot(ctx context.Context, root *trillian.SignedLogRoot) error {

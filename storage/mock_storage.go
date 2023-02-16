@@ -473,6 +473,21 @@ func (mr *MockLogTreeTXMockRecorder) LatestSignedLogRoot(arg0 interface{}) *gomo
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LatestSignedLogRoot", reflect.TypeOf((*MockLogTreeTX)(nil).LatestSignedLogRoot), arg0)
 }
 
+// LatestStableSignedLogRoot mocks base method.
+func (m *MockLogTreeTX) LatestStableSignedLogRoot(arg0 context.Context) (*trillian.SignedLogRoot, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LatestStableSignedLogRoot", arg0)
+	ret0, _ := ret[0].(*trillian.SignedLogRoot)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// LatestStableSignedLogRoot indicates an expected call of LatestStableSignedLogRoot.
+func (mr *MockLogTreeTXMockRecorder) LatestStableSignedLogRoot(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LatestStableSignedLogRoot", reflect.TypeOf((*MockLogTreeTX)(nil).LatestStableSignedLogRoot), arg0)
+}
+
 // SetMerkleNodes mocks base method.
 func (m *MockLogTreeTX) SetMerkleNodes(arg0 context.Context, arg1 []tree.Node) error {
 	m.ctrl.T.Helper()
@@ -705,4 +720,19 @@ func (m *MockReadOnlyLogTreeTX) LatestSignedLogRoot(arg0 context.Context) (*tril
 func (mr *MockReadOnlyLogTreeTXMockRecorder) LatestSignedLogRoot(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LatestSignedLogRoot", reflect.TypeOf((*MockReadOnlyLogTreeTX)(nil).LatestSignedLogRoot), arg0)
+}
+
+// LatestStableSignedLogRoot mocks base method.
+func (m *MockReadOnlyLogTreeTX) LatestStableSignedLogRoot(arg0 context.Context) (*trillian.SignedLogRoot, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LatestStableSignedLogRoot", arg0)
+	ret0, _ := ret[0].(*trillian.SignedLogRoot)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// LatestStableSignedLogRoot indicates an expected call of LatestStableSignedLogRoot.
+func (mr *MockReadOnlyLogTreeTXMockRecorder) LatestStableSignedLogRoot(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LatestStableSignedLogRoot", reflect.TypeOf((*MockReadOnlyLogTreeTX)(nil).LatestStableSignedLogRoot), arg0)
 }

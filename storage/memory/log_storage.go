@@ -321,6 +321,11 @@ func (t *logTreeTX) fetchLatestRoot(ctx context.Context) (*trillian.SignedLogRoo
 	return sth, rev, nil
 }
 
+// TODO: Implement
+func (t *logTreeTX) LatestStableSignedLogRoot(ctx context.Context) (*trillian.SignedLogRoot, error) {
+	return nil, nil
+}
+
 func (t *logTreeTX) StoreSignedLogRoot(ctx context.Context, slr *trillian.SignedLogRoot) error {
 	var root types.LogRootV1
 	if err := root.UnmarshalBinary(slr.LogRoot); err != nil {

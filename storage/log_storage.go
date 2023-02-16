@@ -57,6 +57,9 @@ type ReadOnlyLogTreeTX interface {
 	GetLeavesByHash(ctx context.Context, leafHashes [][]byte, orderBySequence bool) ([]*trillian.LogLeaf, error)
 	// LatestSignedLogRoot returns the most recent SignedLogRoot, if any.
 	LatestSignedLogRoot(ctx context.Context) (*trillian.SignedLogRoot, error)
+	// LatestStableSignedLogRoot returns the SignedLogRoot closest to the configured time period. This log root
+	// can be used by witnesses to countersign.
+	LatestStableSignedLogRoot(ctx context.Context) (*trillian.SignedLogRoot, error)
 }
 
 // LogTreeTX is the transactional interface for reading/updating a Log.

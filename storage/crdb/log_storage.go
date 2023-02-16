@@ -739,6 +739,14 @@ func (t *logTreeTX) fetchLatestRoot(ctx context.Context) (*trillian.SignedLogRoo
 	return &trillian.SignedLogRoot{LogRoot: logRoot}, treeRevision, nil
 }
 
+// TODO: Implement
+func (t *logTreeTX) LatestStableSignedLogRoot(ctx context.Context) (*trillian.SignedLogRoot, error) {
+	t.treeTX.mu.Lock()
+	defer t.treeTX.mu.Unlock()
+
+	return nil, nil
+}
+
 func (t *logTreeTX) StoreSignedLogRoot(ctx context.Context, root *trillian.SignedLogRoot) error {
 	t.treeTX.mu.Lock()
 	defer t.treeTX.mu.Unlock()
